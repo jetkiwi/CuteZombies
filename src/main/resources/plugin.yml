@@ -1,0 +1,6 @@
+name: CuteZombies
+version: 1.0-SNAPSHOT
+description: Zombies gets cute
+author: ja731j
+
+main: net.ja731j.bukkit.cutezombies.Main
