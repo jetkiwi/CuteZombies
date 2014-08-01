@@ -3,19 +3,24 @@ package net.ja731j.bukkit.cutezombies;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Firework;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
+import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
@@ -41,7 +46,7 @@ public class Main extends JavaPlugin implements Listener {
     }
 
     @EventHandler
-    public void onEntityDeath(EntityDeathEvent e) {
+    public void onMobDeath(EntityDeathEvent e) {
         if (e.getEntity().getType() == EntityType.ZOMBIE) {
             World w = e.getEntity().getWorld();
             Location l = e.getEntity().getLocation();
@@ -117,5 +122,16 @@ public class Main extends JavaPlugin implements Listener {
                     break;
             }
         }
+    }
+    
+    @EventHandler
+    public void onPlayerDeath(PlayerDeathEvent e) {
+        Player p = e.getEntity();
+        Firework f = (Firework) p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+        FireworkMeta fm = f.getFireworkMeta();
+        FireworkEffect fe = FireworkEffect.builder().with(FireworkEffect.Type.BALL).withColor(Color.RED).withTrail().build();
+        fm.addEffect(fe);
+        fm.setPower(5);
+        f.setFireworkMeta(fm);
     }
 }
